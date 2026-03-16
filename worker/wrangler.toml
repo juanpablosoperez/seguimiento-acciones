@@ -4,8 +4,8 @@ compatibility_date = "2026-03-16"
 
 [[kv_namespaces]]
 binding = "APP_KV"
-id = "YOUR_KV_NAMESPACE_ID"
-preview_id = "YOUR_KV_PREVIEW_ID"
+id = "4b53d83daa7d4a38939965aabd6d2b10"
+preview_id = "8c7e4d3108ae4702bcc4c9550ddbe6a5"
 
 [triggers]
 crons = ["*/15 * * * *"]
