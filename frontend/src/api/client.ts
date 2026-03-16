@@ -7,7 +7,18 @@ import type {
   WatchlistItem,
 } from '../types/domain'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
+const configuredApiBase = import.meta.env.VITE_API_BASE_URL?.trim()
+
+const API_BASE =
+  configuredApiBase && configuredApiBase.length > 0
+    ? configuredApiBase.replace(/\/$/, '')
+    : typeof window !== 'undefined' && isLocalHost(window.location.hostname)
+      ? '/api'
+      : 'https://cedear-scanner-ar-api.seguimiento-inversiones.workers.dev/api'
+
+function isLocalHost(hostname: string): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1'
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
