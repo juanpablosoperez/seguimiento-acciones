@@ -6,14 +6,16 @@ import { Select } from '../components/ui/Select'
 import { useSettings } from '../hooks/useResources'
 
 export function SettingsPage() {
-  const { data, isLoading, update } = useSettings()
+  const { data, isLoading, isError, error, update } = useSettings()
   const [form, setForm] = useState(data)
 
   useEffect(() => {
     setForm(data)
   }, [data])
 
-  if (isLoading || !form) return <Card>Cargando configuracion...</Card>
+  if (isLoading) return <Card>Cargando configuracion...</Card>
+  if (isError) return <Card>Error cargando configuracion: {error instanceof Error ? error.message : 'Error desconocido'}</Card>
+  if (!form) return <Card>Sin datos de configuracion.</Card>
 
   return (
     <Card className="space-y-3">

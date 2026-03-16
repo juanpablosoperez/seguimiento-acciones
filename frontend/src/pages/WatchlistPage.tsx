@@ -8,11 +8,13 @@ import { useWatchlist } from '../hooks/useResources'
 import type { Market } from '../types/domain'
 
 export function WatchlistPage() {
-  const { data, isLoading, add, remove, update } = useWatchlist()
+  const { data, isLoading, isError, error, add, remove, update } = useWatchlist()
   const [symbol, setSymbol] = useState('')
   const [market, setMarket] = useState<Market>('CEDEARs')
 
-  if (isLoading || !data) return <Card>Cargando watchlist...</Card>
+  if (isLoading) return <Card>Cargando watchlist...</Card>
+  if (isError) return <Card>Error cargando watchlist: {error instanceof Error ? error.message : 'Error desconocido'}</Card>
+  if (!data) return <Card>Sin datos de watchlist.</Card>
 
   const groups = [
     { key: 'CEDEARs', title: 'CEDEARs', items: data.items.filter((item) => item.market === 'CEDEARs') },

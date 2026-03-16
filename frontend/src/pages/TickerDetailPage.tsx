@@ -7,11 +7,11 @@ import { formatCurrency, formatNumber, toPercent } from '../lib/utils'
 
 export function TickerDetailPage() {
   const { symbol = '' } = useParams()
-  const { data, isLoading } = useTicker(symbol)
+  const { data, isLoading, isError, error } = useTicker(symbol)
 
-  if (isLoading || !data) {
-    return <Card>Cargando detalle...</Card>
-  }
+  if (isLoading) return <Card>Cargando detalle...</Card>
+  if (isError) return <Card>Error cargando ticker: {error instanceof Error ? error.message : 'Error desconocido'}</Card>
+  if (!data) return <Card>Sin datos para {symbol}.</Card>
 
   return (
     <div className="space-y-4">

@@ -26,7 +26,7 @@ const defaultFilters: ScanFilters = {
 export function DashboardPage() {
   const [draftFilters, setDraftFilters] = useState<ScanFilters>(defaultFilters)
   const [appliedFilters, setAppliedFilters] = useState<ScanFilters>(defaultFilters)
-  const { rows, allRows, updatedAt, isLoading, refetch } = useScanner(appliedFilters)
+  const { rows, allRows, updatedAt, isLoading, isError, error, refetch } = useScanner(appliedFilters)
   const { data: alertsData } = useAlerts()
   const triggeredToday =
     alertsData?.alerts.filter((alert) => alert.lastTriggeredAt?.slice(0, 10) === new Date().toISOString().slice(0, 10)).length ?? 0
@@ -51,6 +51,12 @@ export function DashboardPage() {
           </Button>
         </div>
       </Card>
+
+      {isError ? (
+        <Card className="border-danger/40 bg-danger/10 text-sm text-red-200">
+          Error consultando API: {error instanceof Error ? error.message : 'Error desconocido'}. Revisa `VITE_API_BASE_URL`.
+        </Card>
+      ) : null}
 
       <ScanFiltersBar
         filters={draftFilters}
