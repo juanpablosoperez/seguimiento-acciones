@@ -1,0 +1,14 @@
+name = "cedear-scanner-ar-api"
+main = "src/index.ts"
+compatibility_date = "2026-03-16"
+
+[[kv_namespaces]]
+binding = "APP_KV"
+id = "YOUR_KV_NAMESPACE_ID"
+preview_id = "YOUR_KV_PREVIEW_ID"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[vars]
+EMAIL_FROM = "scanner@cedear-ar.app"

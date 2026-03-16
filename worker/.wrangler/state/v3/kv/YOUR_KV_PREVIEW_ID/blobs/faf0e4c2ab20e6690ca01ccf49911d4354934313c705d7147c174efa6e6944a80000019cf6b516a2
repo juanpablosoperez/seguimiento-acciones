@@ -1,0 +1,1 @@
+{"emailFrom":"scanner@cedear-ar.app","emailProvider":"mock","cronIntervalMinutes":15,"defaultRsiHigh":70,"defaultRsiLow":30,"marketProvider":"yahoo","defaultDashboardMarket":"Todos","compactCards":false}
