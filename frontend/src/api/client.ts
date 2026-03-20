@@ -21,7 +21,8 @@ function isLocalHost(hostname: string): boolean {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const url = `${API_BASE}${path}`
+  const response = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers ?? {}),
@@ -32,6 +33,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!response.ok) {
     const message = await response.text()
     throw new Error(message || `HTTP ${response.status}`)
+  }
+
+  const contentType = response.headers.get('content-type') ?? ''
+  if (!contentType.includes('application/json')) {
+    const raw = await response.text()
+    throw new Error(`Respuesta no JSON desde ${url}. Verifica VITE_API_BASE_URL. Primeros bytes: ${raw.slice(0, 80)}`)
   }
 
   return response.json() as Promise<T>

@@ -98,19 +98,26 @@ class YahooMarketProvider implements MarketProvider {
 
     let result: YahooChartResult | null = null
     for (const yahooSymbol of candidates) {
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?range=18mo&interval=1d`
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 CedearScannerAR/1.0',
-        },
-      })
+      try {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?range=18mo&interval=1d`
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 CedearScannerAR/1.0',
+          },
+        })
 
-      if (!response.ok) continue
-      const payload = (await response.json()) as YahooChartResponse
-      const maybeResult = payload.chart?.result?.[0]
-      if (maybeResult?.timestamp?.length) {
-        result = maybeResult
-        break
+        if (!response.ok) continue
+        const contentType = response.headers.get('content-type') ?? ''
+        if (!contentType.includes('application/json')) continue
+
+        const payload = (await response.json()) as YahooChartResponse
+        const maybeResult = payload.chart?.result?.[0]
+        if (maybeResult?.timestamp?.length) {
+          result = maybeResult
+          break
+        }
+      } catch {
+        continue
       }
     }
 
